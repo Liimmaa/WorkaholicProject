@@ -15,8 +15,8 @@ class RegistrationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
         setupViews()
+        navigationBar()
     }
     
     let titleLabel: UILabel = {
@@ -132,6 +132,7 @@ class RegistrationViewController: UIViewController {
         label.setUnderlineColor(#colorLiteral(red: 0.3764705882, green: 0.3764705882, blue: 0.3764705882, alpha: 1), for: .normal)
         label.setFloatingLabelColor(#colorLiteral(red: 0.9921568627, green: 0.4274509804, blue: 0.003921568627, alpha: 1), for: .editing)
         label.textColor = #colorLiteral(red: 0.3764705882, green: 0.3764705882, blue: 0.3764705882, alpha: 1)
+        label.isSecureTextEntry = true
         label.autocapitalizationType = .none
         return label
     }()
@@ -147,6 +148,7 @@ class RegistrationViewController: UIViewController {
         label.setUnderlineColor(#colorLiteral(red: 0.3764705882, green: 0.3764705882, blue: 0.3764705882, alpha: 1), for: .normal)
         label.setFloatingLabelColor(#colorLiteral(red: 0.9921568627, green: 0.4274509804, blue: 0.003921568627, alpha: 1), for: .editing)
         label.textColor = #colorLiteral(red: 0.3764705882, green: 0.3764705882, blue: 0.3764705882, alpha: 1)
+        label.isSecureTextEntry = true
         label.autocapitalizationType = .none
         return label
     }()
@@ -164,10 +166,12 @@ class RegistrationViewController: UIViewController {
         button.layer.shadowOpacity = 0.4
         button.layer.shadowRadius = 0.0
         button.layer.masksToBounds = false
-//        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        let icon = UIImage(named: "doubleArrow")!
+        button.setImage(icon, for: .normal)
+        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -100)
+        button.addTarget(self, action: #selector(handleNext), for: .touchUpInside)
        return button
     }()
-    
     
     func setupViews() {
         view.addSubview(titleLabel)
@@ -181,7 +185,12 @@ class RegistrationViewController: UIViewController {
         view.addSubview(passwordLabel)
         view.addSubview(retypePasswordLabel)
         view.addSubview(nextButton)
-        
+        constraints()
+    }
+}
+
+extension RegistrationViewController {
+    func constraints() {
         titleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(view.snp.top).offset(180)
             make.left.equalTo(view.snp.left).offset(30)
@@ -253,4 +262,25 @@ class RegistrationViewController: UIViewController {
             make.width.equalTo(250)
         }
     }
+    
+    func navigationBar() {
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.view.backgroundColor = .clear
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.backIndicatorImage = UIImage()
+    }
+    
+    @objc func handleNext() {
+            if firstNameLabel.text != "" && middleNameLabel.text != "" && lastNameLabel.text != "" && emailLabel.text != "" && phoneNumberLabel.text != "" && passwordLabel.text != "" && retypePasswordLabel.text != "" {
+                let alert = UIAlertController(title: "⚠️", message: "Registration Successful", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+            else {
+                let alert = UIAlertController(title: "⚠️", message: "Please fill in all fields", preferredStyle: UIAlertController.Style.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
 }

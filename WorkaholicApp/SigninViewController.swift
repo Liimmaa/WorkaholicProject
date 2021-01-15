@@ -10,13 +10,19 @@ import SnapKit
 import MaterialComponents.MaterialTextControls_FilledTextAreas
 import MaterialComponents.MaterialTextControls_FilledTextFields
 
-class SigninViewController: UIViewController {
+class SigninViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        passwordLabel.delegate = self
+        passwordLabel.enablePasswordToggle()
         setupViews()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
     let emailLabel: UITextField = {
@@ -44,6 +50,7 @@ class SigninViewController: UIViewController {
         label.setUnderlineColor(#colorLiteral(red: 0.9921568627, green: 0.4274509804, blue: 0.003921568627, alpha: 1), for: .editing)
         label.setUnderlineColor(#colorLiteral(red: 0.3764705882, green: 0.3764705882, blue: 0.3764705882, alpha: 1), for: .normal)
         label.setFloatingLabelColor(#colorLiteral(red: 0.9921568627, green: 0.4274509804, blue: 0.003921568627, alpha: 1), for: .editing)
+        label.isSecureTextEntry = true
         label.textColor = #colorLiteral(red: 0.3764705882, green: 0.3764705882, blue: 0.3764705882, alpha: 1)
         label.autocapitalizationType = .none
         return label
@@ -71,7 +78,7 @@ class SigninViewController: UIViewController {
         signinButton.layer.shadowOpacity = 0.4
         signinButton.layer.shadowRadius = 0.0
         signinButton.layer.masksToBounds = false
-//        signinButton.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        signinButton.addTarget(self, action: #selector(handleSignin), for: .touchUpInside)
        return signinButton
     }()
     
@@ -110,11 +117,6 @@ class SigninViewController: UIViewController {
         return label
     }()
     
-    @objc func handleRegistration() {
-        let view = RegistrationViewController()
-        navigationController?.pushViewController(view, animated: true)
-    }
-    
     func setupViews() {
         view.addSubview(emailLabel)
         view.addSubview(passwordLabel)
@@ -123,7 +125,13 @@ class SigninViewController: UIViewController {
         view.addSubview(enquiryLabel)
         view.addSubview(registerButton)
         view.addSubview(termsLabel)
-        
+        constraints()
+    }
+}
+
+extension SigninViewController {
+    
+    func constraints() {
         emailLabel.snp.makeConstraints { (make) in
             make.top.equalTo(view.snp.top).offset(300)
             make.left.equalTo(view.snp.left).offset(22)
@@ -163,6 +171,30 @@ class SigninViewController: UIViewController {
         termsLabel.snp.makeConstraints { (make) in
             make.bottom.equalTo(view.snp.bottom).offset(-100)
             make.centerX.equalTo(view)
+        }
+    }
+    
+    @objc func handleSignin() {
+        if emailLabel.text != "" && passwordLabel.text != "" {
+            let view = RegistrationViewController()
+            navigationController?.pushViewController(view, animated: true)
+        }
+        else {
+            let alert = UIAlertController(title: "⚠️", message: "Please fill in all fields", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func handleRegistration() {
+        if emailLabel.text != "" && passwordLabel.text != "" {
+            let view = RegistrationViewController()
+            navigationController?.pushViewController(view, animated: true)
+        }
+        else {
+            let alert = UIAlertController(title: "⚠️", message: "Please fill in all fields", preferredStyle: UIAlertController.Style.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
 }

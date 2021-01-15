@@ -2,7 +2,7 @@
 //  WorkaholicAppTests.swift
 //  WorkaholicAppTests
 //
-//  Created by USER on 14/01/2021.
+//  Created by Chioma Mmegwa on 14/01/2021.
 //
 
 import XCTest

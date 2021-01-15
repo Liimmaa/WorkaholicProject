@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  WorkaholicApp
 //
-//  Created by USER on 14/01/2021.
+//  Created by Chioma Mmegwa on 14/01/2021.
 //
 
 import UIKit
