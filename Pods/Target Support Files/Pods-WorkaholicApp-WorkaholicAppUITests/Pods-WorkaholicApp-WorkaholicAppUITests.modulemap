@@ -1,0 +1,6 @@
+framework module Pods_WorkaholicApp_WorkaholicAppUITests {
+  umbrella header "Pods-WorkaholicApp-WorkaholicAppUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
